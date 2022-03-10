@@ -1,17 +1,13 @@
-i=1
-20.times do
-  if (i%3)==0 
-    if (i%5)==0 
-        puts "FizzBuzz"
+1.upto(20) { |i|
+  if i % 3 == 0
+    if i % 5 == 0
+      puts 'FizzBuzz'
     else
-        puts "Fizz"
+      puts 'Fizz'
     end
+  elseif i % 5 == 0
+    puts 'Buzz'
   else
-    if (i%5)==0
-      puts "Buzz"
-    else
-      puts i
-    end
+    puts i
   end
-  i=i+1
-end
+}
