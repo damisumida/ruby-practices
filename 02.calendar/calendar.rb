@@ -1,7 +1,7 @@
 require 'optparse'
 require 'date'
 
-def saturday?(date)
+def print_suffix(date)
   if date.wday == 6
     print "\n"
   else
@@ -33,4 +33,4 @@ saturday?(first_day)
   print (day.to_s).rjust(2)
   saturday?(first_day + idx + 1)
 end
-print "\n"
+puts
