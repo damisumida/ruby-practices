@@ -27,10 +27,10 @@ last_day = Date.new(year, month, -1)
 
 # 初日
 print (first_day.day.to_s).rjust(first_day.wday * 3 + 2)
-saturday?(first_day)
+print_suffix(first_day)
 # 2日目以降
 (2..last_day.day).each.with_index do |day, idx|
   print (day.to_s).rjust(2)
-  saturday?(first_day + idx + 1)
+  print_suffix(first_day + idx + 1)
 end
 puts
