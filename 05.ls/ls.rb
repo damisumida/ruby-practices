@@ -5,7 +5,7 @@ COLUMN = 3
 
 def main
   filename_list = Dir.glob('*').sort
-  return if filename_list.size.zero?
+  return if filename_list.empty?
 
   filename_table = create_filename_table(filename_list)
   show_filename_table(filename_list, filename_table)
@@ -13,19 +13,12 @@ end
 
 def create_filename_table(filename_list)
   filename_table = []
-  COLUMN.times do |count|
-    filename_table.push(create_column(filename_list, count))
+  line_num = (filename_list.size / COLUMN.to_f).ceil
+  filename_list.each_slice(line_num) do |column|
+    column << nil while column.size < line_num # 配列の要素数をそろえる
+    filename_table.push(column)
   end
   filename_table.transpose
-end
-
-def create_column(filename_list, count)
-  line = []
-  line_num = (filename_list.size / COLUMN.to_f).ceil
-  line_num.times do |i|
-    line.push(filename_list[count * line_num + i])
-  end
-  line
 end
 
 def show_filename_table(filename_list, filename_table)
