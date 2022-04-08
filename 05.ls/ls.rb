@@ -12,11 +12,10 @@ def main
 end
 
 def create_filename_table(filename_list)
-  filename_table = []
   line_num = (filename_list.size / COLUMN.to_f).ceil
-  filename_list.each_slice(line_num) do |column|
+  filename_table = filename_list.each_slice(line_num).map do |column|
     column << nil while column.size < line_num # 配列の要素数をそろえる
-    filename_table.push(column)
+    column
   end
   filename_table.transpose
 end
