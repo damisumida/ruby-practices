@@ -1,14 +1,23 @@
 # !/usr/bin/env ruby
 # frozen_string_literal: true
 
+require 'optparse'
+
 COLUMN = 3
 
 def main
-  filename_list = Dir.glob('*').sort
+  options = ARGV.getopts('a')
+  filename_list = create_file_list(options)
   return if filename_list.empty?
 
   filename_table = create_filename_table(filename_list)
   show_filename_table(filename_list, filename_table)
+end
+
+def create_file_list(options)
+  filename_list = Dir.glob('*')
+  filename_list.push(Dir.glob('.*')) if options['a']
+  filename_list.flatten.sort
 end
 
 def create_filename_table(filename_list)
