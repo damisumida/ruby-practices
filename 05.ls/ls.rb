@@ -15,8 +15,11 @@ def main
 end
 
 def create_file_list(options)
-  filename_list = Dir.glob('*')
-  filename_list.push(Dir.glob('.*')) if options['a']
+  filename_list = if options['a']
+                    Dir.glob('*', File::FNM_DOTMATCH)
+                  else
+                    Dir.glob('*')
+                  end
   filename_list.flatten.sort
 end
 
