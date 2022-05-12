@@ -6,10 +6,11 @@ require 'optparse'
 COLUMN = 3
 
 def main
-  options = ARGV.getopts('a')
+  options = ARGV.getopts('a', 'r')
   filename_list = create_file_list(options)
   return if filename_list.empty?
 
+  filename_list = filename_list.reverse if options['r']
   filename_table = create_filename_table(filename_list)
   show_filename_table(filename_list, filename_table)
 end
