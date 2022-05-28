@@ -19,7 +19,7 @@ def main
     show_file_attributes(file_attributes)
   else
     filename_table = connect_filename(filename_list)
-    show_filename_table(filename_list, filename_table, options)
+    show_filename_table(filename_list, filename_table)
   end
 end
 
