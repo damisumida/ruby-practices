@@ -84,7 +84,7 @@ end
 
 def timestamp(file_status)
   file_timestamp = file_status.mtime
-  file_timestamp.strftime '%b %d %k:%M'
+  file_timestamp.strftime '%b %d %H:%M'
 end
 
 def show_total(file_attributes)
