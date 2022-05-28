@@ -148,7 +148,7 @@ def connect_filename(filename_list)
   filename_table.transpose
 end
 
-def show_filename_table(filename_list, filename_table, options)
+def show_filename_table(filename_list, filename_table)
   item_long = filename_list.max_by(&:length).length + 1
   filename_table.each do |filename_column|
     filename_column.each do |item|
