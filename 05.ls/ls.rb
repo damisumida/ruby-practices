@@ -33,11 +33,7 @@ def create_file_list(options)
 end
 
 def create_file_attributes(filename_list)
-  file_attribute = []
-  filename_list.each do |file_name|
-    file_attribute.push(create_file_attribute(file_name))
-  end
-  file_attribute
+  filename_list.map { |file_name| create_file_attribute(file_name) }
 end
 
 def create_file_attribute(file_name)
@@ -79,7 +75,9 @@ def attribute(file_status)
     '--x' => '1',
     '---' => '0'
   }
-  attributes.key(file_status.slice(-3)) + attributes.key(file_status.slice(-2)) + attributes.key(file_status.slice(-1))
+  attribute = ''
+  -3.upto(-1) { |t| attribute += attributes.key(file_status.slice(t)) }
+  attribute
 end
 
 def timestamp(file_status)
@@ -88,10 +86,7 @@ def timestamp(file_status)
 end
 
 def show_total(file_attributes)
-  total = 0
-  file_attributes.each do |file_attribute|
-    total += file_attribute[:block]
-  end
+  total = file_attributes.sum { |file_attribute| file_attribute[:block] }
   total /= 2
   puts "total #{total}"
 end
