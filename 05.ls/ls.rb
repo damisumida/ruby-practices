@@ -126,12 +126,14 @@ def show_item(file_attribute, word_size, key_value)
 
   if key_value[0] == :herdlink_num || key_value[0] == :file_size
     print file_attribute[key_value[0]].to_s.rjust(word_size[key_value[0]])
-  else
+  elsif key_value[0] != :file_name
     print file_attribute[key_value[0]].to_s.ljust(word_size[key_value[0]])
+  else
+    print file_attribute[key_value[0]].to_s.ljust(0)
   end
   return if key_value[0] == :file_kind
 
-  print ' '
+  print ' ' if key_value[0] != :file_name
 end
 
 def connect_filename(filename_list)
