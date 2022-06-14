@@ -7,13 +7,15 @@ require 'readline'
 def main
   options = ARGV.getopts('l')
   filename_list = ARGV
+  word_size = 0
   file_info = if filename_list.size.zero?
+                word_size = 7
                 file_status = readlines.join
                 [build_file_info(options, file_status, nil)]
               else
                 build_file_info_list(options, filename_list)
               end
-  show_file_info(file_info)
+  show_file_info(file_info, word_size)
 end
 
 def build_file_info_list(options, filename_list)
@@ -69,8 +71,8 @@ def calc_total(file_info)
   end
 end
 
-def show_file_info(file_info)
-  word_size = build_word_size(file_info)
+def show_file_info(file_info, word_size)
+  word_size = build_word_size(file_info) if word_size.zero?
   file_info.each do |info|
     info.each do |key_value|
       show_item(info, key_value, word_size)
