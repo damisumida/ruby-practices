@@ -7,9 +7,8 @@ require 'readline'
 def main
   options = ARGV.getopts('l')
   filename_list = ARGV
-  word_size = 0
+  word_size = default_word_size(filename_list, options)
   file_info = if filename_list.size.zero?
-                word_size = 7
                 file_status = readlines.join
                 [build_file_info(options, file_status, nil)]
               else
@@ -18,13 +17,23 @@ def main
   show_file_info(file_info, word_size)
 end
 
+def default_word_size(filename_list, options)
+  if options['l'] && filename_list.size > 1
+    4
+  elsif !options['l'] && filename_list.size.zero?
+    7
+  else
+    0
+  end
+end
+
 def build_file_info_list(options, filename_list)
   file_info = []
   filename_list.each do |file_name|
     file_status = File.read("#{Dir.pwd}/#{file_name}")
     file_info.push(build_file_info(options, file_status, file_name))
   end
-  file_info.push(calc_total(file_info)) unless file_info.size == 1
+  file_info.push(calc_total(file_info)) if file_info.size != 1
   file_info
 end
 
@@ -53,19 +62,16 @@ def build_data(file_status, file_name)
 end
 
 def calc_total(file_info)
-  line_num = file_info.sum { |info| info[:line_num] }
-  word_num = file_info.sum { |info| info[:word_num] } unless file_info[0][:word_num].nil?
-  file_size = file_info.sum { |info| info[:file_size] } unless file_info[0][:file_size].nil?
   if file_info[0][:word_num].nil?
     {
-      line_num: line_num,
+      line_num: file_info.sum { |info| info[:line_num] },
       file_name: 'total'
     }
   else
     {
-      line_num: line_num,
-      word_num: word_num,
-      file_size: file_size,
+      line_num: file_info.sum { |info| info[:line_num] },
+      word_num: file_info.sum { |info| info[:word_num] },
+      file_size: file_info.sum { |info| info[:file_size] },
       file_name: 'total'
     }
   end
@@ -84,7 +90,9 @@ end
 def build_word_size(file_info)
   max_word_size = 0
   file_info.each do |info|
-    info.each { |key_value| max_word_size = info[key_value[0]].to_s.size if info[key_value[0]].to_s.size >= max_word_size && key_value[0] != :file_name }
+    info.each do |key_value|
+      max_word_size = info[key_value[0]].to_s.size if info[key_value[0]].to_s.size >= max_word_size && key_value[0] != :file_name
+    end
   end
   max_word_size
 end
