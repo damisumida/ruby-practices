@@ -5,29 +5,22 @@ require 'optparse'
 require 'readline'
 
 def main
-  option = perse_argv
-  filenames = build_filenames
-  file_info_list = build_file_info_list(filenames)
+  option = parse_argv
+  file_info_list = build_file_info_list(option[:filenames])
   file_info_list.push(calc_total(file_info_list)) if file_info_list.size != 1
   show_file_info_list(file_info_list, option)
 end
 
-def perse_argv
+def parse_argv
   option = Hash.new(false)
   OptionParser.new do |opt|
     opt.on('-l') { |v| option[:l] = v }
     opt.on('-w') { |v| option[:w] = v }
     opt.on('-c') { |v| option[:c] = v }
-    opt.parse(ARGV)
+    opt.parse!(ARGV)
   end
+  option[:filenames] = ARGV
   option
-end
-
-def build_filenames
-  opts = OptionParser.new do |opt|
-    opt.on('-l', '-w', '-c')
-  end
-  opts.parse(ARGV)
 end
 
 def build_file_info_list(filenames)
@@ -63,11 +56,11 @@ def calc_total(file_info_list)
 end
 
 def show_file_info_list(file_info_list, option)
-  keys = create_show_keylist(option)
+  keynames = create_keynames(option)
   word_size = calc_wordsize(file_info_list)
   file_info_list.each do |info|
     info.each do |key, value|
-      show_item(key, value, word_size) if keys.include?(key)
+      show_item(key, value, word_size) if keynames.include?(key)
     end
     puts
   end
@@ -81,7 +74,7 @@ def calc_wordsize(file_info_list)
   word_size.flatten.max
 end
 
-def create_show_keylist(option)
+def create_keynames(option)
   all_unchecked = !(option[:l] || option[:w] || option[:c])
   return %w[line_num word_num file_size file_name] if all_unchecked
 
