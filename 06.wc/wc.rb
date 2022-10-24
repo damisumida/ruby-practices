@@ -4,6 +4,8 @@
 require 'optparse'
 require 'readline'
 
+DEFAULT_LENGTH = 4
+
 def main
   option = parse_argv
   file_info_list = build_file_info_list(option[:filenames])
@@ -26,24 +28,24 @@ end
 def build_file_info_list(filenames)
   file_info_list = []
   if filenames.size.zero?
-    input_value = $stdin.readlines.join
-    file_info_list.push(build_file_info(input_value, nil))
+    content_value = $stdin.readlines.join
+    file_info_list.push(build_file_info(content_value, nil))
   else
     filenames.each do |file_name|
-      file_status = File.read("#{Dir.pwd}/#{file_name}")
-      file_info_list.push(build_file_info(file_status, file_name))
+      content_value = File.read("#{Dir.pwd}/#{file_name}")
+      file_info_list.push(build_file_info(content_value, file_name))
     end
   end
   file_info_list
 end
 
-def build_file_info(file_status, file_name)
-  file_info = {}
-  file_info['line_num'] = file_status.count("\n")
-  file_info['word_num'] = file_status.split(/\s+/).size
-  file_info['file_size'] = file_status.size
-  file_info['file_name'] = file_name
-  file_info
+def build_file_info(content_value, file_name)
+  {
+    'line_num' => content_value.count("\n"),
+    'word_num' => content_value.split(/\s+/).size,
+    'file_size' => content_value.size,
+    'file_name' => file_name
+  }
 end
 
 def calc_total(file_info_list)
@@ -67,7 +69,7 @@ def show_file_info_list(file_info_list, option)
 end
 
 def calc_wordsize(file_info_list)
-  word_size = [4]
+  word_size = [DEFAULT_LENGTH]
   %w[line_num word_num file_size].each do |key|
     word_size.push(file_info_list.map { |info| info[key].to_s.size })
   end
@@ -83,6 +85,7 @@ def create_keynames(option)
   key.push('word_num') if option[:w]
   key.push('file_size') if option[:c]
   key.push('file_name')
+  key
 end
 
 def show_item(key, value, word_size)
@@ -91,7 +94,7 @@ def show_item(key, value, word_size)
   else
     print value.to_s.rjust(word_size)
   end
-  print ' '
+  print ' ' if key != 'file_name'
 end
 
 main
