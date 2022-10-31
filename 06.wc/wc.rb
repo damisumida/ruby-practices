@@ -8,7 +8,7 @@ TEXT_LENGTH = 4
 
 def main
   option = parse_argv
-  file_info_list = build_file_info_list(option['file_name'])
+  file_info_list = build_file_info_list(option[:file_name])
   file_info_list.push(calc_total(file_info_list)) if file_info_list.size != 1
   show_file_info_list(file_info_list, option)
 end
@@ -16,12 +16,12 @@ end
 def parse_argv
   option = Hash.new(false)
   OptionParser.new do |opt|
-    opt.on('-l') { |v| option['line_num'] = v }
-    opt.on('-w') { |v| option['word_num'] = v }
-    opt.on('-c') { |v| option['file_size'] = v }
+    opt.on('-l') { |v| option[:line_num] = v }
+    opt.on('-w') { |v| option[:word_num] = v }
+    opt.on('-c') { |v| option[:file_size] = v }
     opt.parse!(ARGV)
   end
-  option['file_name'] = ARGV
+  option[:file_name] = ARGV
   option
 end
 
@@ -41,24 +41,24 @@ end
 
 def build_file_info(content_value, file_name)
   {
-    'line_num' => content_value.count("\n"),
-    'word_num' => content_value.split(/\s+/).size,
-    'file_size' => content_value.size,
-    'file_name' => file_name
+    line_num: content_value.count("\n"),
+    word_num: content_value.split(/\s+/).size,
+    file_size: content_value.size,
+    file_name: file_name
   }
 end
 
 def calc_total(file_info_list)
   file_info = {}
-  file_info['line_num'] = file_info_list.sum { |info| info['line_num'] }
-  file_info['word_num'] = file_info_list.sum { |info| info['word_num'] }
-  file_info['file_size'] = file_info_list.sum { |info| info['file_size'] }
-  file_info['file_name'] = 'total'
+  file_info[:line_num] = file_info_list.sum { |info| info[:line_num] }
+  file_info[:word_num] = file_info_list.sum { |info| info[:word_num] }
+  file_info[:file_size] = file_info_list.sum { |info| info[:file_size] }
+  file_info[:file_name] = 'total'
   file_info
 end
 
 def show_file_info_list(file_info_list, option)
-  all_unchecked = !(option['line_num'] || option['word_num'] || option['file_size'])
+  all_unchecked = option.values_at(:line_num, :word_num, :file_size).none?
   word_size = calc_wordsize(file_info_list)
   file_info_list.each do |info|
     info.each do |key, value|
@@ -77,7 +77,7 @@ def calc_wordsize(file_info_list)
 end
 
 def show_item(key, value, word_size)
-  if key == 'file_name'
+  if key == :file_name
     print value.to_s
   else
     print value.to_s.rjust(word_size)
