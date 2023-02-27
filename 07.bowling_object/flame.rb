@@ -27,22 +27,3 @@ class Flame
     [first_point.score, second_point.score, third_point.score].sum
   end
 end
-
-class FlameTest < Minitest::Test
-  def test_flame
-    flame1 = Flame.new('X', 0)
-    refute flame1.spare?
-    assert flame1.strike?
-    assert_equal 10, flame1.score
-
-    flame2 = Flame.new(3, 7)
-    assert flame2.spare?
-    refute flame2.strike?
-    assert_equal 10, flame2.score
-
-    flame3 = Flame.new(4, 2)
-    refute flame3.spare?
-    refute flame3.strike?
-    assert_equal 6, flame3.score
-  end
-end
