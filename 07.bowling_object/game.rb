@@ -13,27 +13,18 @@ class Game
   end
 
   def create_flames(pinfall_text)
-    pinfall_text = add_strike_second_pinfall(pinfall_text)
-    punctuate_pinfall_text(pinfall_text)
-  end
-
-  def add_strike_second_pinfall(pinfall_text)
     pinfall_text = pinfall_text.split(',')
-    new_pinfall_text = []
-    pinfall_text.each_with_index do |point, index|
-      new_pinfall_text << point
-      new_pinfall_text << nil if point == 'X' && pinfall_text.size - 3 > index
-    end
-    new_pinfall_text
-  end
-
-  def punctuate_pinfall_text(pinfall_text)
     flames = []
+    index = 0
     FLAME_SIZE.times do |i|
       if FLAME_SIZE == i + 1
-        flames << Flame.new(pinfall_text[i * 2], pinfall_text[i * 2 + 1], pinfall_text[i * 2 + 2])
+        flames << Flame.new(pinfall_text[index], pinfall_text[index + 1], pinfall_text[index + 2])
+      elsif pinfall_text[index] == 'X'
+        flames << Flame.new(pinfall_text[index], nil)
+        index += 1
       else
-        flames << Flame.new(pinfall_text[i * 2], pinfall_text[i * 2 + 1])
+        flames << Flame.new(pinfall_text[index], pinfall_text[index + 1])
+        index += 2
       end
     end
     flames
