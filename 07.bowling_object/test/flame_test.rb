@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 require 'minitest/autorun'
-require './flame.rb'
+require_relative './flame'
 
 class FlameTest < Minitest::Test
   def test_strike

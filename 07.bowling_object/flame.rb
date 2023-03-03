@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'minitest/autorun'
-require_relative './shot.rb'
+require_relative 'shot'
 
 class Flame
   attr_reader :second_point, :first_point, :third_point
