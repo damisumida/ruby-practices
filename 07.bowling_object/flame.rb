@@ -4,6 +4,7 @@ require 'minitest/autorun'
 require_relative 'shot'
 
 class Flame
+  MAX_POINT = 10
   attr_reader :second_point, :first_point, :third_point
 
   def initialize(first_point, second_point, third_point = nil)
@@ -13,14 +14,14 @@ class Flame
   end
 
   def spare?
-    return false if first_point.score == 10
-    return true if first_point.score + second_point.score == 10
+    return false if strike?
+    return true if first_point.score + second_point.score == MAX_POINT
 
     false
   end
 
   def strike?
-    first_point.score == 10
+    first_point.score == MAX_POINT
   end
 
   def score
