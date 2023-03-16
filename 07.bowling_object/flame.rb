@@ -15,9 +15,8 @@ class Flame
 
   def spare?
     return false if strike?
-    return true if first_point.score + second_point.score == MAX_POINT
 
-    false
+    first_point.score + second_point.score == MAX_POINT
   end
 
   def strike?
